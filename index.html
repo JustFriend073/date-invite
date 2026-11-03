@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <!-- Эта строка нужна, чтобы сайт нормально отображался на телефоне -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для самой красивой ❤️</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ============ ЭКРАН 1: ПРОВЕРКА ============ -->
+    <div id="screen1" class="screen active">
+        <div class="card">
+            <h1>Стой-ка 👀</h1>
+            <p class="subtitle">Прежде чем пустить тебя дальше, мне нужно убедиться, что ты — это ты.</p>
+            
+            <p class="question">Кого ты любишь больше всех на свете?</p>
+            
+            <input type="text" id="nameInput" placeholder="Напиши имя..." autocomplete="off">
+            
+            <button onclick="checkName()" class="btn-primary">Проверить</button>
+            
+            <p id="errorMsg" class="error"></p>
+            <p id="hintMsg" class="hint"></p>
+        </div>
+    </div>
+
+    <!-- ============ ЭКРАН 2: ПРИГЛАШЕНИЕ ============ -->
+    <div id="screen2" class="screen">
+        <div class="main-content">
+            <h1 class="title-main">С 3-летием нас, любимая ❤️</h1>
+            <p class="subtitle-main">Ты прошла проверку. А теперь — главное.</p>
+            
+            <!-- Таймер до свидания -->
+            <div class="timer-block">
+                <p class="timer-label">До нашего свидания осталось:</p>
+                <div id="countdown" class="countdown">
+                    <div><span id="days">0</span><p>дней</p></div>
+                    <div><span id="hours">0</span><p>часов</p></div>
+                    <div><span id="minutes">0</span><p>минут</p></div>
+                    <div><span id="seconds">0</span><p>секунд</p></div>
+                </div>
+            </div>
+            
+            <!-- Детали свидания -->
+            <div class="details">
+                <p>📍 <strong>Где:</strong> Ресторан "Название", ул. Ленина, 10</p>
+                <p>🕒 <strong>Когда:</strong> 19 декабря,  19:00</p>
+                <p>👗 <strong>Дресс-код:</strong> Самое красивое что у тебя есть 😉</p>
+                <p>🙈 <strong>Условия:</strong> Отличное настроение 🥳</p>
+            </div>
+            
+            <!-- Кнопки согласия -->
+            <div class="buttons">
+                <button id="yesBtn" class="btn-yes" onclick="sayYes()">Да, конечно! 💖</button>
+                <button id="noBtn" class="btn-no">Нет</button>
+            </div>
+            
+            <!-- Сообщение после согласия -->
+            <div id="finalMessage" class="final-message" style="display:none;">
+                <h2>Я знал, что ты согласишься 😘</h2>
+                <p>Жду не дождусь. Люблю тебя.</p>
+            </div>
+        </div>
+    </div>
+
+     <!-- Фоновая музыка -->
+    <audio id="bgMusic" loop>
+        <source src="music/song.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Кнопка включения звука -->
+    <button id="musicBtn" class="music-btn" onclick="toggleMusic()">
+        🎵 Включить музыку
+    </button>
+
+    <!-- Подключаем библиотеку конфетти через CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
