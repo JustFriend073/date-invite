@@ -105,7 +105,57 @@
             <div id="finalMessage" class="final-message" style="display:none;">
                 <h2>Я знал, что ты согласишься 😘</h2>
                 <p>Жду не дождусь. Люблю тебя.</p>
+                <!-- ВОТ ЭТА КНОПКА ОТКРЫВАЕТ ФОТО! -->
+                <button onclick="showPhotos()" class="btn-photos">Наши лучшие моменты 📸</button>
             </div>
+        </div>
+    </div>
+
+    <!-- ============ ЭКРАН 3: ФОТОГРАФИИ ============ -->
+    <div id="screen3" class="screen">
+        <div class="photos-content">
+            <h1 class="photos-title">Наши лучшие моменты ❤️</h1>
+            
+            <div class="photo-grid">
+                <div class="photo-item left clickable" onclick="openModal(this)" data-caption="В этот день мы только познакомились, и я ещё не знал, что ты станешь самым важным человеком в моей жизни ❤️">
+                    <img src="photos/photo1.jpg" alt="Наше фото 1">
+                </div>
+                <div class="photo-item right clickable" onclick="openModal(this)" data-caption="Наше первое совместное фото. Ты такая красивая!">
+                    <img src="photos/photo2.jpg" alt="Наше фото 2">
+                </div>
+                <div class="photo-item left clickable" onclick="openModal(this)" data-caption="Помнишь этот день? Мы гуляли до утра и не хотели расставаться">
+                    <img src="photos/photo3.jpg" alt="Наше фото 3">
+                </div>
+                <div class="photo-item right clickable" onclick="openModal(this)" data-caption="Тот самый вечер, когда всё стало серьёзно">
+                    <img src="photos/photo4.jpg" alt="Наше фото 4">
+                </div>
+                <div class="photo-item left clickable" onclick="openModal(this)" data-caption="Наше первое путешествие вместе">
+                    <img src="photos/photo5.jpg" alt="Наше фото 5">
+                </div>
+                <div class="photo-item right clickable" onclick="openModal(this)" data-caption="И вот мы здесь. 3 года вместе, и это только начало">
+                    <img src="photos/photo6.jpg" alt="Наше фото 6">
+                </div>
+            </div>
+            
+            <div class="memory-text">
+                <p>Я очень рад, что мы случайным стечением обстоятельств познакомились 23.10.2023 ❤️</p>
+            </div>
+            
+            <button onclick="backToMain()" class="btn-back">← Вернуться назад</button>
+        </div>
+    </div>
+
+        <!-- Модальное окно для фотографий -->
+    <div id="photoModal" class="modal">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <button class="modal-arrow modal-arrow-left" onclick="changePhoto(-1)">&#10094;</button>
+        <button class="modal-arrow modal-arrow-right" onclick="changePhoto(1)">&#10095;</button>
+        <div class="modal-content">
+            <img id="modalImg" src="" alt="Увеличенное фото">
+            <div id="modalCaptionContainer" class="modal-caption-container">
+                <p id="modalCaption" class="modal-caption"></p>
+            </div>
+            <p id="photoCounter" class="photo-counter"></p>
         </div>
     </div>
 
