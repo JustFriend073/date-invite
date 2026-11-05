@@ -8,12 +8,12 @@ const validNames = [
 let attempts = 0;
 
 // === ФУНКЦИЯ ПРОВЕРКИ ИМЕНИ ===
+// === ФУНКЦИЯ ПРОВЕРКИ ИМЕНИ ===
 function checkName() {
     const input = document.getElementById('nameInput');
     const errorMsg = document.getElementById('errorMsg');
     const hintMsg = document.getElementById('hintMsg');
     
-    // Убираем пробелы по краям и приводим к нижнему регистру
     const userInput = input.value.trim().toLowerCase();
     
     if (userInput === '') {
@@ -23,24 +23,16 @@ function checkName() {
     }
     
     if (validNames.includes(userInput)) {
-        // ✅ ПРАВИЛЬНО! Переходим на главный экран
-        document.getElementById('screen1').classList.remove('active');
-        document.getElementById('screen2').classList.add('active');
-        
-        // Запускаем конфетти в честь победы
-        launchConfetti();
-        
-        // Запускаем таймер
-        startCountdown();
-        
-        // Активируем убегающую кнопку "Нет"
-        initRunawayButton();
+        // ✅ ПРАВИЛЬНО! Переходим к шагу 2
+        document.getElementById('step1').classList.remove('active');
+        document.getElementById('step2').classList.add('active');
+        errorMsg.textContent = '';
+        hintMsg.textContent = '';
     } else {
         // ❌ НЕВЕРНО
         attempts++;
         errorMsg.textContent = 'Неправильно! Попробуй ещё раз 🤔';
         
-        // Подсказки в зависимости от количества попыток
         if (attempts === 1) {
             hintMsg.textContent = 'Подсказка: имя начинается на букву "Д" 😉';
         } else if (attempts === 2) {
@@ -51,7 +43,94 @@ function checkName() {
             hintMsg.textContent = 'Ладно, спойлер: напиши "Данюша" 😄';
         }
         
-        // Трясём карточку при ошибке
+        const card = document.querySelector('.card');
+        card.style.animation = 'none';
+        setTimeout(() => {
+            card.style.animation = 'shake 0.5s';
+        }, 10);
+    }
+}
+
+// === ПРОВЕРКА ВОЗРАСТА ===
+function updateAgeDisplay() {
+    const ageValue = document.getElementById('ageValue');
+    const slider = document.getElementById('ageSlider');
+    ageValue.textContent = slider.value;
+}
+
+function checkAge() {
+    const slider = document.getElementById('ageSlider');
+    const ageError = document.getElementById('ageError');
+    const selectedAge = parseInt(slider.value);
+    
+    if (selectedAge === 18) {
+        // ✅ ПРАВИЛЬНО! Переходим к шагу 3
+        document.getElementById('step2').classList.remove('active');
+        document.getElementById('step3').classList.add('active');
+        ageError.textContent = '';
+    } else {
+        // ❌ НЕВЕРНО
+        ageError.textContent = 'Неправильно! Подумай ещё раз 🤔';
+        
+        const card = document.querySelector('.card');
+        card.style.animation = 'none';
+        setTimeout(() => {
+            card.style.animation = 'shake 0.5s';
+        }, 10);
+    }
+}
+
+// === ПРОВЕРКА ДАТЫ ЗНАКОМСТВА ===
+function checkDate() {
+    const dayInput = document.getElementById('dayInput');
+    const monthInput = document.getElementById('monthInput');
+    const yearInput = document.getElementById('yearInput');
+    const dateError = document.getElementById('dateError');
+    const dateHint = document.getElementById('dateHint');
+    
+    const day = parseInt(dayInput.value);
+    const month = parseInt(monthInput.value);
+    const year = parseInt(yearInput.value);
+    
+    // Правильная дата: 23.10.2023
+    const correctDay = 23;
+    const correctMonth = 10;
+    const correctYear = 2023;
+    
+    if (isNaN(day) || isNaN(month) || isNaN(year)) {
+        dateError.textContent = 'Заполни все поля! 📅';
+        dateHint.textContent = '';
+        return;
+    }
+    
+    if (day === correctDay && month === correctMonth && year === correctYear) {
+        // ✅ ПРАВИЛЬНО! Переходим на главный экран
+        document.getElementById('screen1').classList.remove('active');
+        document.getElementById('screen2').classList.add('active');
+        
+        // Запускаем конфетти
+        launchConfetti();
+        
+        // Запускаем таймер
+        startCountdown();
+        
+        // Активируем убегающую кнопку "Нет"
+        initRunawayButton();
+        
+        dateError.textContent = '';
+        dateHint.textContent = '';
+    } else {
+        // ❌ НЕВЕРНО
+        dateError.textContent = 'Неправильная дата! Попробуй ещё раз 🤔';
+        
+        if (year !== correctYear) {
+            dateHint.textContent = 'Подсказка: это было не так давно...';
+        } else if (month !== correctMonth) {
+            dateHint.textContent = 'Подсказка: год правильный, а месяц?';
+        } else {
+            dateHint.textContent = 'Подсказка: осень, конец октября...';
+        }
+        
         const card = document.querySelector('.card');
         card.style.animation = 'none';
         setTimeout(() => {
@@ -181,6 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('nameInput').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') checkName();
     });
+    updateAgeDisplay();
 });
 
 // === МУЗЫКА ===

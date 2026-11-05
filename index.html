@@ -10,8 +10,10 @@
 <body>
 
     <!-- ============ ЭКРАН 1: ПРОВЕРКА ============ -->
-    <div id="screen1" class="screen active">
-        <div class="card">
+<div id="screen1" class="screen active">
+    <div class="card">
+        <!-- ШАГ 1: ИМЯ -->
+        <div id="step1" class="step active">
             <h1>Стой-ка 👀</h1>
             <p class="subtitle">Прежде чем пустить тебя дальше, мне нужно убедиться, что ты — это ты.</p>
             
@@ -24,13 +26,55 @@
             <p id="errorMsg" class="error"></p>
             <p id="hintMsg" class="hint"></p>
         </div>
+
+        <!-- ШАГ 2: ВОЗРАСТ -->
+        <div id="step2" class="step">
+            <h1>Второй вопрос 🎂</h1>
+            <p class="subtitle">Отлично! А теперь вспомни, сколько лет тому, кого ты только что написала.</p>
+            
+            <p class="question">Сколько ему лет?</p>
+            
+            <div class="slider-container">
+                <input type="range" id="ageSlider" min="15" max="25" value="15" class="age-slider" oninput="updateAgeDisplay()">
+                <div class="age-display">
+                    <span id="ageValue">18</span>
+                    <span class="age-label">лет</span>
+                </div>
+            </div>
+            
+            <button onclick="checkAge()" class="btn-primary">Дальше</button>
+            
+            <p id="ageError" class="error"></p>
+        </div>
+
+        <!-- ШАГ 3: ДАТА ЗНАКОМСТВА -->
+        <div id="step3" class="step">
+            <h1>Последний вопрос 📅</h1>
+            <p class="subtitle">Ты почти у цели! Осталось вспомнить одну важную дату.</p>
+            
+            <p class="question">Когда мы познакомились?</p>
+            
+            <div class="date-inputs">
+                <input type="number" id="dayInput" min="1" max="31" placeholder="ДД" class="date-field">
+                <span class="date-separator">.</span>
+                <input type="number" id="monthInput" min="1" max="12" placeholder="ММ" class="date-field">
+                <span class="date-separator">.</span>
+                <input type="number" id="yearInput" min="2020" max="2026" placeholder="ГГГГ" class="date-field">
+            </div>
+            
+            <button onclick="checkDate()" class="btn-primary">Проверить</button>
+            
+            <p id="dateError" class="error"></p>
+            <p id="dateHint" class="hint"></p>
+        </div>
     </div>
+</div>
 
     <!-- ============ ЭКРАН 2: ПРИГЛАШЕНИЕ ============ -->
     <div id="screen2" class="screen">
         <div class="main-content">
-            <h1 class="title-main">С 3-летием нас, любимая ❤️</h1>
-            <p class="subtitle-main">Ты прошла проверку. А теперь — главное.</p>
+            <h1 class="title-main">С 3-летием нас, солнышко ❤️</h1>
+            <p class="subtitle-main">Ты прошла этот квест. А теперь — главное.</p>
             
             <!-- Таймер до свидания -->
             <div class="timer-block">
@@ -54,7 +98,7 @@
             <!-- Кнопки согласия -->
             <div class="buttons">
                 <button id="yesBtn" class="btn-yes" onclick="sayYes()">Да, конечно! 💖</button>
-                <button id="noBtn" class="btn-no">Нет</button>
+                <button id="noBtn" class="btn-no">Нет.</button>
             </div>
             
             <!-- Сообщение после согласия -->
