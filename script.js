@@ -307,16 +307,15 @@ function backToMain() {
     window.scrollTo(0, 0);
 }
 
-// === МОДАЛЬНОЕ ОКНО ДЛЯ ФОТО ===
+// === МОДАЛЬНОЕ ОКНО ДЛЯ ФОТО (ИСПРАВЛЕННАЯ ВЕРСИЯ) ===
 let currentPhotoIndex = 0;
 let photoItems = [];
 
-// === МОДАЛЬНОЕ ОКНО ДЛЯ ФОТО (ЖЕЛЕЗОБЕТОННАЯ ВЕРСИЯ) ===
 function openModal(element) {
-    // 1. Находим родительский блок с фото, даже если кликнули по самой картинке
+    // Находим родительский блок с фото
     const photoItem = element.closest('.photo-item');
     if (!photoItem) {
-        console.error('Не удалось найти блок с фото. Проверь HTML.');
+        console.error('Не удалось найти блок с фото');
         return;
     }
 
@@ -326,53 +325,65 @@ function openModal(element) {
     const modalCaptionContainer = document.getElementById('modalCaptionContainer');
     const photoCounter = document.getElementById('photoCounter');
     
-    // 2. Собираем все фото в массив
-    const allPhotos = document.querySelectorAll('.photo-item');
-    const currentIndex = Array.from(allPhotos).indexOf(photoItem);
+    // Собираем ВСЕ фото (независимо от класса clickable)
+    photoItems = Array.from(document.querySelectorAll('.photo-item'));
     
-    // 3. Получаем данные
+    // Находим индекс текущего фото
+    currentPhotoIndex = photoItems.indexOf(photoItem);
+    
+    // Получаем данные
     const img = photoItem.querySelector('img');
-    const caption = photoItem.getAttribute('data-caption') || 'Просто красивое фото ❤️';
-    const totalPhotos = allPhotos.length;
+    const caption = photoItem.getAttribute('data-caption') || 'Красивое фото ❤️';
+    const totalPhotos = photoItems.length;
     
     if (!img) {
-        console.error('Картинка <img> не найдена внутри блока!');
+        console.error('Картинка не найдена');
         return;
     }
 
-    // 4. Устанавливаем данные в модальное окно
+    // Устанавливаем данные
     modalImg.src = img.src;
     modalCaption.textContent = caption;
-    photoCounter.textContent = `${currentIndex + 1} из ${totalPhotos}`;
+    photoCounter.textContent = `${currentPhotoIndex + 1} из ${totalPhotos}`;
     
-    // 5. Настраиваем цвет текста (белый -> пастельный красный)
-    if (currentIndex === 0) {
-        modalCaption.style.color = 'white';
-        modalCaptionContainer.style.background = 'rgba(194, 24, 91, 0.8)';
-        modalCaptionContainer.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
-    } else if (currentIndex === totalPhotos - 1) {
-        modalCaption.style.color = '#ff6b8a';
-        modalCaptionContainer.style.background = 'transparent';
-        modalCaptionContainer.style.boxShadow = 'none';
-    } else {
-        const progress = currentIndex / (totalPhotos - 1);
-        const red = Math.floor(255 - (255 - 220) * progress);
-        const green = Math.floor(255 - 255 * progress);
-        const blue = Math.floor(255 - 255 * progress);
-        modalCaption.style.color = `rgb(${red}, ${green}, ${blue})`;
-        modalCaptionContainer.style.background = 'transparent';
-        modalCaptionContainer.style.boxShadow = 'none';
-    }
+    // Настраиваем цвет текста
+    updateCaptionStyle(currentPhotoIndex, totalPhotos);
 
-    // 6. Показываем окно и запускаем анимацию
+    // Показываем окно
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
     launchHearts();
     
-    console.log('✅ Модальное окно открыто, фото номер:', currentIndex + 1);
+    console.log('✅ Модальное окно открыто, фото номер:', currentPhotoIndex + 1, 'Всего фото:', totalPhotos);
+}
+
+function changePhoto(direction) {
+    console.log('🔄 Переключение фото, направление:', direction, 'Текущий индекс:', currentPhotoIndex);
+    
+    if (photoItems.length === 0) {
+        console.error('❌ Массив photoItems пуст!');
+        return;
+    }
+    
+    currentPhotoIndex += direction;
+    
+    // Циклическая навигация
+    if (currentPhotoIndex < 0) {
+        currentPhotoIndex = photoItems.length - 1;
+    } else if (currentPhotoIndex >= photoItems.length) {
+        currentPhotoIndex = 0;
+    }
+    
+    console.log('📸 Новое фото номер:', currentPhotoIndex + 1);
+    updateModalContent();
 }
 
 function updateModalContent() {
+    if (photoItems.length === 0) {
+        console.error('❌ Нет фото для отображения');
+        return;
+    }
+    
     const modalImg = document.getElementById('modalImg');
     const modalCaption = document.getElementById('modalCaption');
     const modalCaptionContainer = document.getElementById('modalCaptionContainer');
@@ -380,56 +391,45 @@ function updateModalContent() {
     
     const currentItem = photoItems[currentPhotoIndex];
     const img = currentItem.querySelector('img');
-    const caption = currentItem.getAttribute('data-caption');
+    const caption = currentItem.getAttribute('data-caption') || 'Красивое фото ❤️';
     const totalPhotos = photoItems.length;
+    
+    if (!img) {
+        console.error('❌ Картинка не найдена в фото номер', currentPhotoIndex + 1);
+        return;
+    }
     
     modalImg.src = img.src;
     modalCaption.textContent = caption;
     photoCounter.textContent = `${currentPhotoIndex + 1} из ${totalPhotos}`;
     
     updateCaptionStyle(currentPhotoIndex, totalPhotos);
+    
+    console.log('✅ Фото обновлено:', currentPhotoIndex + 1);
 }
 
 function updateCaptionStyle(index, total) {
     const modalCaption = document.getElementById('modalCaption');
     const modalCaptionContainer = document.getElementById('modalCaptionContainer');
     
-    if (index === 0) {
-        // Первое фото: белая подпись с фоном
-        modalCaption.style.color = 'white';
-        modalCaptionContainer.style.background = 'rgba(194, 24, 91, 0.8)';
-        modalCaptionContainer.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
-    } else if (index === total - 1) {
-        // Последнее фото: пастельный красный
-        modalCaption.style.color = '#ff6b8a';
-        modalCaptionContainer.style.background = 'transparent';
-        modalCaptionContainer.style.boxShadow = 'none';
-    } else {
-        // Промежуточные фото: плавный переход к красному
-        const progress = index / (total - 1);
-        const red = Math.floor(255 - (255 - 220) * progress);
-        const green = Math.floor(255 - 255 * progress);
-        const blue = Math.floor(255 - 255 * progress);
-        modalCaption.style.color = `rgb(${red}, ${green}, ${blue})`;
-        modalCaptionContainer.style.background = 'transparent';
-        modalCaptionContainer.style.boxShadow = 'none';
-    }
-}
-
-function changePhoto(direction) {
-    currentPhotoIndex += direction;
-    if (currentPhotoIndex < 0) {
-        currentPhotoIndex = photoItems.length - 1;
-    } else if (currentPhotoIndex >= photoItems.length) {
-        currentPhotoIndex = 0;
-    }
-    updateModalContent();
+    // Плавный градиент от белого к красному для ВСЕХ фото
+    const progress = index / (total - 1);
+    const red = Math.floor(255 - (255 - 235) * progress);
+    const green = Math.floor(255 - 255 * progress);
+    const blue = Math.floor(255 - 255 * progress);
+    
+    modalCaption.style.color = `rgb(${red}, ${green}, ${blue})`;
+    modalCaptionContainer.style.background = 'transparent';
+    modalCaptionContainer.style.boxShadow = 'none';
+    
+    console.log(`📝 Фото ${index + 1}/${total}: цвет rgb(${red}, ${green}, ${blue})`);
 }
 
 function closeModal() {
     const modal = document.getElementById('photoModal');
     modal.style.display = 'none';
     document.body.style.overflow = 'auto';
+    console.log('❌ Модальное окно закрыто');
 }
 
 // Закрытие по клику на фон
